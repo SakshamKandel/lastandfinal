@@ -37,7 +37,19 @@ const LoginForm = () => {
       if (response.data.email) {
         localStorage.setItem('email', response.data.email);
       }
-      navigate("/");
+      
+      // Wait a moment for the cookie to be set
+      setTimeout(() => {
+        if (document.cookie.includes("adminToken")) {
+          navigate("/create-notice");
+        } else if (document.cookie.includes("teacherToken")) {
+          navigate("/routine");
+        } else if (document.cookie.includes("studentToken")) {
+          navigate("/notice");
+        } else {
+          navigate("/");
+        }
+      }, 100);
     } catch (error) {
       if (error.response) {
         toast.error(error.response.data || "Login failed!");
