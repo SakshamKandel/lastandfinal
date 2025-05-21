@@ -13,6 +13,8 @@ const DEFAULT_CONFIG = {
   }
 };
 
+export { API_BASE_URL, DEFAULT_CONFIG };
+
 /**
  * Builds the full API URL for a given endpoint
  * @param {string} endpoint - The API endpoint (e.g., "/getTeachers")
