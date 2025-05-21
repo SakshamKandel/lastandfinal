@@ -74,11 +74,27 @@ console.log(`Server running in ${NODE_ENV} mode`);
 app.use(express.json());
 
 // Configure CORS for production or development
+const allowedOrigins = [
+  'https://nawataraenglish.onrender.com', // production frontend
+  'http://localhost:5173' // local dev
+];
+
 app.use(cors({
-  origin: NODE_ENV === 'production' 
-    ? [FRONTEND_URL, /\.navatara\.edu\.np$/] // Allow your domain and subdomains
-    : FRONTEND_URL,
-  credentials: true
+  origin: function(origin, callback) {
+    if (!origin) return callback(null, true);
+    if (
+      allowedOrigins.indexOf(origin) !== -1 ||
+      /^https:\/\/nawataraenglish\.onrender\.com$/.test(origin)
+    ) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin'],
+  optionsSuccessStatus: 204
 }));
 
 app.use(cookieParser());
