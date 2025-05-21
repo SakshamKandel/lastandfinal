@@ -17,9 +17,8 @@ const LoginForm = () => {
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm();
-  const teacherLoggedIn = document.cookie.includes("teacherToken");
-  const adminLoggedIn = document.cookie.includes("adminToken");
-  const studentLoggedIn = document.cookie.includes("studentToken");
+  const token = localStorage.getItem('token');
+  const role = localStorage.getItem('role');
   const contextUse = useContext(contextCreate);
   const navigate = useNavigate();
   
@@ -29,22 +28,22 @@ const LoginForm = () => {
   
   const formBackendFunc = async (data) => {
     try {
-      const response = await axios.post(getApiUrl("/login"), data, {
-        withCredentials: true,
-      });
+      const response = await axios.post(getApiUrl("/login"), data);
       toast.success(response.data.alertMsg || "Logged in successfully!");
       contextUse.setName(response.data.name);
       if (response.data.email) {
         localStorage.setItem('email', response.data.email);
       }
-      
-      // Wait a moment for the cookie to be set
+      if (response.data.token && response.data.role) {
+        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('role', response.data.role);
+      }
       setTimeout(() => {
-        if (document.cookie.includes("adminToken")) {
+        if (response.data.role === "admin") {
           navigate("/create-notice");
-        } else if (document.cookie.includes("teacherToken")) {
+        } else if (response.data.role === "teacher") {
           navigate("/routine");
-        } else if (document.cookie.includes("studentToken")) {
+        } else if (response.data.role === "student") {
           navigate("/notice");
         } else {
           navigate("/");
@@ -59,7 +58,7 @@ const LoginForm = () => {
     }
   };
   
-  return !teacherLoggedIn && !adminLoggedIn && !studentLoggedIn ? (
+  return !token ? (
     <div className="min-h-screen bg-[#f3f2ef] font-sans flex flex-col items-center py-12 px-4 sm:px-6 lg:px-8">
       <ToastContainer />
       <div className="w-full max-w-md">

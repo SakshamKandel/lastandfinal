@@ -8,9 +8,11 @@ import { getApiUrl } from "../config/api";
 
 const Navbar = () => {
   const location = useLocation();
-  const teacherLoggedIn = document.cookie.includes("teacherToken");
-  const adminLoggedIn = document.cookie.includes("adminToken");
-  const studentLoggedIn = document.cookie.includes("studentToken");
+  const token = localStorage.getItem('token');
+  const role = localStorage.getItem('role');
+  const adminLoggedIn = token && role === 'admin';
+  const teacherLoggedIn = token && role === 'teacher';
+  const studentLoggedIn = token && role === 'student';
   const navigate = useNavigate();
   const [showDropDown, setshowDropDown] = useState(false);
   const [showAdminMenu, setShowAdminMenu] = useState(false);
@@ -21,21 +23,11 @@ const Navbar = () => {
   const handleLogout = async () => {
     try {
       setShowLogoutModal(false);
-      const response = await axios.post(
-        getApiUrl("/logout"),
-        {},
-        { withCredentials: true }
-      );
-      toast.success(response.data || "Logged out successfully!");
       localStorage.clear();
       navigate("/");
       window.location.reload();
     } catch (error) {
-      if (error.response) {
-        toast.error(error.response.data || "Logout failed!");
-      } else {
-        toast.error(error.message || "Logout failed!");
-      }
+      toast.error("Logout failed!");
     }
   };
 

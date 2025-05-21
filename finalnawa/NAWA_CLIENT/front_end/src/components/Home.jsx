@@ -3,10 +3,12 @@ import { Link } from "react-router-dom";
 import { contextCreate } from "../Context";
 
 const Home = () => {
-  const teacherLoggedIn=document.cookie.includes("teacherToken")
-  const adminLoggedIn=document.cookie.includes("adminToken")
-  const studentLoggedIn=document.cookie.includes("studentToken")
-  const contextUse=useContext(contextCreate)
+  const token = localStorage.getItem('token');
+  const role = localStorage.getItem('role');
+  const teacherLoggedIn = token && role === 'teacher';
+  const adminLoggedIn = token && role === 'admin';
+  const studentLoggedIn = token && role === 'student';
+  const contextUse = useContext(contextCreate)
   return (
     <div className="min-h-screen bg-[#f3f2ef]">
       {/* Welcome greeting banner - Enhanced for admin, standard for others */}

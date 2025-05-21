@@ -18,20 +18,13 @@ const token_login = async (req, res) => {
     console.log('Token payload:', pay_load); // Debug log
     
     const token = jwt.sign(pay_load, process.env.SECRET_KEY);
-    const cookieOptions = {
-      secure: isProduction,
-      sameSite: isProduction ? "none" : "lax",
-      httpOnly: true,
-      domain: isProduction ? ".onrender.com" : undefined,
-    };
-    if (req.userType === "teacher") {
-      res.cookie("teacherToken", token, cookieOptions);
-    } else if (req.userType === "admin") {
-      res.cookie("adminToken", token, cookieOptions);
-    } else {
-      res.cookie("studentToken", token, cookieOptions);
-    }
-    res.json({alertMsg:"Logged In Successfully",name:req.data.name, email:req.data.email})
+    res.json({
+      alertMsg: "Logged In Successfully",
+      name: req.data.name,
+      email: req.data.email,
+      token, // send JWT in response
+      role: req.userType
+    });
   } catch (error) {
     console.log('Token generation error:', error); // Debug log
     return res.status(404).send(error.message);

@@ -8,7 +8,6 @@ const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://nawa-backend.onren
 
 // Default request configuration
 const DEFAULT_CONFIG = {
-  withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
   }

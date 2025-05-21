@@ -9,7 +9,9 @@ import { toast } from 'react-toastify';
 import { getApiUrl } from "../../../config/api";
 
 const CreateAccountStudent = () => {
-  const adminLoggedIn = document.cookie.includes("adminToken");
+  const token = localStorage.getItem('token');
+  const role = localStorage.getItem('role');
+  const adminLoggedIn = token && role === 'admin';
   const [showPass, setshowPass] = useState(false);
   const navigate = useNavigate();
   const {

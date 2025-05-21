@@ -4,18 +4,21 @@ import { API_BASE_URL, DEFAULT_CONFIG } from '../config/api';
 // Create an axios instance with default config
 const api = axios.create({
   baseURL: API_BASE_URL,
-  ...DEFAULT_CONFIG
+  headers: {
+    'Content-Type': 'application/json',
+  }
 });
 
-// Add request interceptor for error handling
+// Add request interceptor to include JWT token if present
 api.interceptors.request.use(
   (config) => {
-    // You can add auth tokens here if needed
+    const token = localStorage.getItem('token');
+    if (token) {
+      config.headers['Authorization'] = `Bearer ${token}`;
+    }
     return config;
   },
-  (error) => {
-    return Promise.reject(error);
-  }
+  (error) => Promise.reject(error)
 );
 
 // Add response interceptor for error handling
