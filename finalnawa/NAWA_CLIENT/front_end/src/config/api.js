@@ -20,9 +20,10 @@ const DEFAULT_CONFIG = {
  * @returns {string} The full API URL
  */
 export const getApiUrl = (endpoint) => {
-  // Make sure endpoint starts with a slash
-  const formattedEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
-  return `${API_BASE_URL}${formattedEndpoint}`;
+  // Remove trailing slash from base URL and leading slash from endpoint
+  const base = API_BASE_URL.replace(/\/+$/, '');
+  const path = endpoint.replace(/^\/+/, '');
+  return `${base}/${path}`;
 };
 
 /**
