@@ -1,6 +1,7 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
+import { getApiUrl } from '../../config/api';
 
 const NoticeMap = (props) => {
   return (
@@ -35,7 +36,7 @@ const NoticeMap = (props) => {
 
           {props.attachments && (
             <a
-              href={`http://localhost:8000/${props.attachments}`}
+              href={getApiUrl(props.attachments)}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex w-fit px-3 py-1 text-xs font-medium text-white bg-yellow-600 rounded-md hover:bg-blue-700 focus:ring-2 focus:outline-none focus:ring-blue-400 dark:bg-yellow-500 dark:hover:bg-yellow-600 dark:focus:ring-blue-800"

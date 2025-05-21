@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { getApiUrl } from '../../config/api';
 
 const RemoveTeacher = () => {
   const [teachers, setTeachers] = useState([]);
@@ -14,7 +15,7 @@ const RemoveTeacher = () => {
   const fetchTeachers = async () => {
     setLoading(true);
     try {
-      const res = await axios.get('http://localhost:8000/getTeachers', { withCredentials: true });
+      const res = await axios.get(getApiUrl('/getTeachers'), { withCredentials: true });
       setTeachers(res.data || []);
     } catch (err) {
       toast.error(err.response?.data?.message || 'Failed to fetch teachers');
@@ -34,7 +35,7 @@ const RemoveTeacher = () => {
               onClick={async () => {
                 toast.dismiss();
                 try {
-                  await axios.delete(`http://localhost:8000/api/admin/remove-teacher/${teacherId}`, { withCredentials: true });
+                  await axios.delete(getApiUrl(`/api/admin/remove-teacher/${teacherId}`), { withCredentials: true });
                   toast.success('Teacher removed successfully');
                   fetchTeachers();
                 } catch (error) {

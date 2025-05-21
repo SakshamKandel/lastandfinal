@@ -4,6 +4,7 @@ import NoAccess from "../../NoAccess";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { toast } from 'react-toastify';
+import { getApiUrl } from '../../../config/api';
 
 const EditStudentData = () => {
   const {
@@ -24,7 +25,7 @@ const EditStudentData = () => {
         setShowConfirm(true);
         setConfirmAction(() => async () => {
           const response = await axios.patch(
-            `http://localhost:8000/editStudent/${location.state.student._id}`,
+            getApiUrl(`/editStudent/${location.state.student._id}`),
             data,
             {withCredentials: true}
           );

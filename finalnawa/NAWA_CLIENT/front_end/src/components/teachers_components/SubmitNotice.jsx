@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { getApiUrl } from '../../config/api';
 
 const SubmitNotice = () => {
   const [formData, setFormData] = useState({
@@ -27,7 +28,7 @@ const SubmitNotice = () => {
           return;
         }
 
-        const response = await axios.get('http://localhost:8000/getTeachers', {
+        const response = await axios.get(getApiUrl('/getTeachers'), {
           withCredentials: true
         });
         
@@ -57,7 +58,7 @@ const SubmitNotice = () => {
       setNoticesLoading(true);
       setNoticesError('');
       try {
-        const response = await axios.get(`http://localhost:8000/teacher-alerts?teacherId=${teacherId}`, {
+        const response = await axios.get(getApiUrl(`/teacher-alerts?teacherId=${teacherId}`), {
           withCredentials: true
         });
         setNotices(response.data);
@@ -88,7 +89,7 @@ const SubmitNotice = () => {
 
     try {
       console.log('Submitting notice with data:', { ...formData, teacherId }); // Debug log
-      const response = await axios.post('http://localhost:8000/create-notice', {
+      const response = await axios.post(getApiUrl('/create-notice'), {
         ...formData,
         teacherId
       }, {

@@ -4,6 +4,7 @@ import NoAccess from "../../NoAccess";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { toast } from 'react-toastify';
+import { getApiUrl } from '../../../config/api';
 
 const EditFeeRecord = () => {
   const navigate = useNavigate();
@@ -22,7 +23,7 @@ const EditFeeRecord = () => {
     const fetchOldRecord = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8000/getFee/${location.state?.id}`,
+          getApiUrl(`/getFee/${location.state?.id}`),
           { withCredentials: true }
         );
         setRecord(response.data);
@@ -72,7 +73,7 @@ const EditFeeRecord = () => {
           setRecord([updatedRecord]);
 
           const response = await axios.patch(
-            `http://localhost:8000/editFee/${location.state.id}`,
+            getApiUrl(`/editFee/${location.state.id}`),
             updatedRecord,
             { withCredentials: true }
           );

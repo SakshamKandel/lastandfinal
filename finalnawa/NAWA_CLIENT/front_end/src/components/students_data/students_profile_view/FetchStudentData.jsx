@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from 'react-toastify';
 import axios from "axios";
+import { getApiUrl } from '../../../config/api';
 
 const FetchStudentData = (props) => {
   const adminLoggedIn = document.cookie.includes("adminToken");
@@ -38,7 +39,7 @@ const FetchStudentData = (props) => {
               onClick={async () => {
                 toast.dismiss();
                 try {
-                  await axios.delete(`http://localhost:8000/api/admin/remove-student/${studentId}`, { withCredentials: true });
+                  await axios.delete(getApiUrl(`/admin/remove-student/${studentId}`), { withCredentials: true });
                   toast.success('Student removed successfully');
                   fetchStudents();
                 } catch (error) {

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import { getApiUrl } from '../../config/api';
 
 const TeacherAlerts = () => {
   const [notices, setNotices] = useState([]);
@@ -21,7 +22,7 @@ const TeacherAlerts = () => {
           return;
         }
 
-        const response = await axios.get('http://localhost:8000/getTeachers', {
+        const response = await axios.get(getApiUrl('/getTeachers'), {
           withCredentials: true
         });
         
@@ -44,7 +45,7 @@ const TeacherAlerts = () => {
 
   const fetchNotices = async (id) => {
     try {
-      const response = await axios.get(`http://localhost:8000/teacher-alerts?teacherId=${id}`, {
+      const response = await axios.get(getApiUrl(`/teacher-alerts?teacherId=${id}`), {
         withCredentials: true
       });
       setNotices(response.data);

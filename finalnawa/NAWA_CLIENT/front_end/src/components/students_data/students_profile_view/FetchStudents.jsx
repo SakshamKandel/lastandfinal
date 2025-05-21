@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import FetchStudentData from "./FetchStudentData";
 import NoAccess from "../../NoAccess";
 import { toast } from 'react-toastify';
+import { getApiUrl } from '../../../config/api';
 
 const FetchStudents = () => {
   const adminLoggedIn = document.cookie.includes("adminToken");
@@ -42,7 +43,7 @@ const FetchStudents = () => {
     for (let c = from; c <= to; c++) {
       try {
         const response = await axios.get(
-          `http://localhost:8000/getStudents/${c}`,
+          getApiUrl(`/getStudents/${c}`),
           { withCredentials: true }
         );
         allStudents = allStudents.concat(response.data);

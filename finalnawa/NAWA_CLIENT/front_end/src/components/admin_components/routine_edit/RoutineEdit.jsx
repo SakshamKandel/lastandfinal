@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import NoAccess from "../../NoAccess";
 import { useForm } from "react-hook-form";
 import { toast } from 'react-toastify';
+import { getApiUrl } from '../../../config/api';
 
 const RoutineEdit = () => {
   const {
@@ -43,7 +44,7 @@ const RoutineEdit = () => {
       try {
         if (adminLoggedIn) {
           const teachersData = await axios.get(
-            "http://localhost:8000/getTeachers",
+            getApiUrl('/getTeachers'),
             { withCredentials: true }
           );
           setTeachers(teachersData.data);
@@ -65,7 +66,7 @@ const RoutineEdit = () => {
         setRoutine([]);
       }
       const result = await axios.get(
-        `http://localhost:8000/fetch/routines/${data.teachers}`,
+        getApiUrl(`/fetch/routines/${data.teachers}`),
         { withCredentials: true }
       );
       setRoutine(result.data);
@@ -104,7 +105,7 @@ const RoutineEdit = () => {
         data = routine.schedule;
       });
       const response = await axios.patch(
-        `http://localhost:8000/updateRoutine/${id}`,
+        getApiUrl(`/updateRoutine/${id}`),
         { data },
         { withCredentials: true }
       );

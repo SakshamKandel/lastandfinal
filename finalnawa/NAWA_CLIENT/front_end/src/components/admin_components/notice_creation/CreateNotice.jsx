@@ -5,6 +5,7 @@ import axios from "axios"
 import { useNavigate } from "react-router-dom";
 import StepperInNoticeForm from "./StepperInNoticeForm";
 import { toast } from 'react-toastify';
+import { getApiUrl } from '../../../config/api';
 
 const CreateNotice = () => {
   const adminLoggedIn = document.cookie.includes("adminToken");
@@ -91,7 +92,7 @@ const CreateNotice = () => {
       if (data.attachments && data.attachments[0]) {
         filedata.append("attachments", data.attachments[0]);
       }
-      const response = await axios.post("http://localhost:8000/admin/create-notice", filedata, {
+      const response = await axios.post(getApiUrl("/admin/create-notice"), filedata, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

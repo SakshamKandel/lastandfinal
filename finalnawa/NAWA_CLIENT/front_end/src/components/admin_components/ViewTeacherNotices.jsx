@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { getApiUrl } from '../../config/api';
 
 const ViewTeacherNotices = () => {
   const [notices, setNotices] = useState([]);
@@ -15,7 +16,7 @@ const ViewTeacherNotices = () => {
 
   const fetchNotices = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/teacher-notices', {
+      const response = await axios.get(getApiUrl('/teacher-notices'), {
         withCredentials: true
       });
       setNotices(response.data);
@@ -34,7 +35,7 @@ const ViewTeacherNotices = () => {
   // Approve a notice
   const handleApprove = async (id) => {
     try {
-      await axios.patch(`http://localhost:8000/teacher-notices/${id}/approve`, {}, { withCredentials: true });
+      await axios.patch(getApiUrl(`/teacher-notices/${id}/approve`), {}, { withCredentials: true });
       fetchNotices();
       setShowModal(false);
       toast.success('Notice approved!');
@@ -46,7 +47,7 @@ const ViewTeacherNotices = () => {
   // Deny a notice
   const handleDeny = async (id) => {
     try {
-      await axios.patch(`http://localhost:8000/teacher-notices/${id}/deny`, {}, { withCredentials: true });
+      await axios.patch(getApiUrl(`/teacher-notices/${id}/deny`), {}, { withCredentials: true });
       fetchNotices();
       setShowModal(false);
       toast.success('Notice denied!');

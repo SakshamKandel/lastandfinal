@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import NoAccess from "../../NoAccess";
 import axios from "axios";
+import { getApiUrl } from '../../../config/api';
 // import { PDFViewer } from "@react-pdf/renderer";
 // import ReceiptPDF from "./ReceiptPDF";
 import { toast } from 'react-toastify';
@@ -33,10 +34,10 @@ const ViewFee = () => {
     const fetchRecord = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8000/getFee/${location.state?.student._id}`,
+          getApiUrl(`/getFee/${location.state?.student._id}`),
           { withCredentials: true }
         );
-        const amountResponse=await axios.get(`http://localhost:8000/fetch/class/structure/fees/${location.state?.student.class_name}`,{withCredentials:true})
+        const amountResponse=await axios.get(getApiUrl(`/fetch/class/structure/fees/${location.state?.student.class_name}`),{withCredentials:true})
         setRecord(response.data);
         let total = 0;
         months.map((month) => {

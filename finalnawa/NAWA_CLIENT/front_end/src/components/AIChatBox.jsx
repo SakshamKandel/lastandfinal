@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
+import { getApiUrl } from '../config/api';
 
 const BOT_AVATAR = 'https://cdn-icons-png.flaticon.com/512/4712/4712035.png';
 const ADMIN_AVATAR = 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png';
@@ -73,12 +74,12 @@ const QA = [
   {
     role: 'admin',
     patterns: [
-      { q: /how many students|student count|total students|number of students|kids|children/i, a: async () => { const res = await axios.get('http://localhost:8000/getStudents', { withCredentials: true }); return `There are ${res.data.length} students.`; } },
-      { q: /how many teachers|teacher count|total teachers|number of teachers|staff|dedicated staff/i, a: async () => { const res = await axios.get('http://localhost:8000/getTeachers', { withCredentials: true }); return `There are over 50 teachers at Nawatara English School.`; } },
-      { q: /salary|payroll|payment|pay|wages|my pay|teacher pay|teacher salary/i, a: async () => { const res = await axios.get('http://localhost:8000/getSalaryRecords', { withCredentials: true }); return res.data.length ? res.data.slice(0, 5).map(s => `• ${s.teacherName}: Rs. ${s.amount}`).join('\n') : 'No salary records found.'; } },
-      { q: /routine|schedule|period|class routine|class schedule|today's routine|today's schedule/i, a: async () => { const res = await axios.get('http://localhost:8000/getRoutine', { withCredentials: true }); return res.data.length ? res.data.slice(0, 5).map(r => `• ${r.time} - ${r.subject} (${r.teacher}, Class ${r.class})`).join('\n') : 'No routine info.'; } },
-      { q: /list students|show students|student list/i, a: async () => { const res = await axios.get('http://localhost:8000/getStudents', { withCredentials: true }); return res.data.length ? res.data.slice(0, 5).map(s => `• ${s.name} (Class ${s.class_name})`).join('\n') : 'No students found.'; } },
-      { q: /list teachers|show teachers|teacher list/i, a: async () => { const res = await axios.get('http://localhost:8000/getTeachers', { withCredentials: true }); return res.data.length ? res.data.slice(0, 5).map(t => `• ${t.name} (${t.email})`).join('\n') : 'No teachers found.'; } },
+      { q: /how many students|student count|total students|number of students|kids|children/i, a: async () => { const res = await axios.get(getApiUrl('/getStudents'), { withCredentials: true }); return `There are ${res.data.length} students.`; } },
+      { q: /how many teachers|teacher count|total teachers|number of teachers|staff|dedicated staff/i, a: async () => { const res = await axios.get(getApiUrl('/getTeachers'), { withCredentials: true }); return `There are over 50 teachers at Nawatara English School.`; } },
+      { q: /salary|payroll|payment|pay|wages|my pay|teacher pay|teacher salary/i, a: async () => { const res = await axios.get(getApiUrl('/getSalaryRecords'), { withCredentials: true }); return res.data.length ? res.data.slice(0, 5).map(s => `• ${s.teacherName}: Rs. ${s.amount}`).join('\n') : 'No salary records found.'; } },
+      { q: /routine|schedule|period|class routine|class schedule|today's routine|today's schedule/i, a: async () => { const res = await axios.get(getApiUrl('/getRoutine'), { withCredentials: true }); return res.data.length ? res.data.slice(0, 5).map(r => `• ${r.time} - ${r.subject} (${r.teacher}, Class ${r.class})`).join('\n') : 'No routine info.'; } },
+      { q: /list students|show students|student list/i, a: async () => { const res = await axios.get(getApiUrl('/getStudents'), { withCredentials: true }); return res.data.length ? res.data.slice(0, 5).map(s => `• ${s.name} (Class ${s.class_name})`).join('\n') : 'No students found.'; } },
+      { q: /list teachers|show teachers|teacher list/i, a: async () => { const res = await axios.get(getApiUrl('/getTeachers'), { withCredentials: true }); return res.data.length ? res.data.slice(0, 5).map(t => `• ${t.name} (${t.email})`).join('\n') : 'No teachers found.'; } },
       { q: /school|about|info|information|location|where|facilities|facility|staff|student|children|kids|services|infrastructure/i, a: async () => {
         return "Nawatara English School is located in Biratnagar, Nepal. We have over 50 dedicated staff members and more than 500 students. Facilities include science labs, computer labs, library, sports ground, and a cafeteria.";
       } },
@@ -87,7 +88,7 @@ const QA = [
       { q: /help|what can you do|usage|example|how to use/i, a: "You can ask about students, staff, teachers, salary, routine, or school info. Try: 'How many students?', 'Show me the teacher list', 'What is today's routine?', 'What facilities do you have?'" },
       { q: /.*/, a: "Sorry, I didn't understand. Try: 'How many students?', 'Show me the teacher list', 'What is today's routine?', 'Tell me about the school', or 'What facilities do you have?'" },
       { q: /remove teacher|edit teacher|teacher management|manage teachers|edit teacher details/i, a: async () => {
-        setPendingRedirectUrl('http://localhost:5173/admin/remove-teacher');
+        setPendingRedirectUrl(getApiUrl('/admin/remove-teacher'));
         return 'To manage teachers (remove or edit), do you want me to redirect you to the teacher management page?';
       } },
     ]
@@ -137,7 +138,7 @@ const QA = [
   {
     role: 'student',
     patterns: [
-      { q: /my routine|my schedule|my period|my class|my timetable|my today/i, a: async () => { const res = await axios.get('http://localhost:8000/getRoutine', { withCredentials: true }); return res.data.length ? res.data.slice(0, 5).map(r => `• ${r.time} - ${r.subject} (${r.teacher}, Class ${r.class})`).join('\n') : 'No routine info.'; } },
+      { q: /my routine|my schedule|my period|my class|my timetable|my today/i, a: async () => { const res = await axios.get(getApiUrl('/getRoutine'), { withCredentials: true }); return res.data.length ? res.data.slice(0, 5).map(r => `• ${r.time} - ${r.subject} (${r.teacher}, Class ${r.class})`).join('\n') : 'No routine info.'; } },
       { q: /school|about|info|information|location|where|facilities|facility|staff|student|children|kids|services|infrastructure/i, a: async () => {
         return "Nawatara English School is located in Biratnagar, Nepal. We have over 50 dedicated staff members and more than 500 students. Facilities include science labs, computer labs, library, sports ground, and a cafeteria.";
       } },
@@ -196,33 +197,33 @@ const AIChatBox = () => {
     const lower = text.toLowerCase();
     // Admin/Teacher: Student list
     if ((role === 'admin' || role === 'teacher') && STUDENT_LIST_REGEX.test(text)) {
-      setPendingRedirectUrl('/fetch-students');
+      setPendingRedirectUrl(getApiUrl('/fetch-students'));
       return `To view the student list, do you want me to redirect you to the page?`;
     }
     // Admin/Teacher: Teacher list
     if ((role === 'admin' || role === 'teacher') && TEACHER_LIST_REGEX.test(text)) {
-      setPendingRedirectUrl('http://localhost:5173/admin/remove-teacher');
+      setPendingRedirectUrl(getApiUrl('/admin/remove-teacher'));
       return `To view the teacher list, do you want me to redirect you to the page?`;
     }
     // Admin/Teacher: Notices
     if ((role === 'admin' || role === 'teacher') && NOTICES_REGEX.test(text)) {
-      setPendingRedirectUrl('/notice');
+      setPendingRedirectUrl(getApiUrl('/notice'));
       return `To view all school notices, do you want me to redirect you to the page?`;
     }
     // Teacher: Salary
     if (role === 'teacher' && SALARY_REGEX.test(text)) {
-      setPendingRedirectUrl('/my-salary');
+      setPendingRedirectUrl(getApiUrl('/my-salary'));
       return `To view your salary details, do you want me to redirect you to the page?`;
     }
     // Teacher: Routine
     if (role === 'teacher' && ROUTINE_REGEX.test(text)) {
-      setPendingRedirectUrl('/routine');
+      setPendingRedirectUrl(getApiUrl('/routine'));
       return `To view your routine, do you want me to redirect you to the page?`;
     }
     // Admin: How many students?
     if (role === 'admin' && /how many students|student count|total students|number of students|kids|children/i.test(lower)) {
       try {
-        const res = await axios.get('http://localhost:8000/getStudents', { withCredentials: true });
+        const res = await axios.get(getApiUrl('/getStudents'), { withCredentials: true });
         if (!res.data || !Array.isArray(res.data)) return "Sorry, I couldn't fetch the student count right now. Please try again later or contact support.";
         return `There are ${res.data.length} students enrolled in the school.`;
       } catch (err) {
@@ -232,7 +233,7 @@ const AIChatBox = () => {
     // Admin: How many teachers?
     if (role === 'admin' && /how many teachers|teacher count|total teachers|number of teachers|staff|dedicated staff/i.test(lower)) {
       try {
-        const res = await axios.get('http://localhost:8000/getTeachers', { withCredentials: true });
+        const res = await axios.get(getApiUrl('/getTeachers'), { withCredentials: true });
         return `There are over 50 teachers at Nawatara English School.`;
       } catch (err) {
         return "Sorry, I couldn't fetch the teacher count right now.";
@@ -241,7 +242,7 @@ const AIChatBox = () => {
     // Teacher: How many students?
     if (role === 'teacher' && /how many students|student count|total students|number of students|kids|children/i.test(lower)) {
       try {
-        const res = await axios.get('http://localhost:8000/getStudents', { withCredentials: true });
+        const res = await axios.get(getApiUrl('/getStudents'), { withCredentials: true });
         if (!res.data || !Array.isArray(res.data)) return "Sorry, I couldn't fetch the student count right now. Please try again later or contact support.";
         return `There are ${res.data.length} students enrolled in the school.`;
       } catch (err) {
@@ -251,7 +252,7 @@ const AIChatBox = () => {
     // Teacher: How many teachers?
     if (role === 'teacher' && /how many teachers|teacher count|total teachers|number of teachers|staff|dedicated staff/i.test(lower)) {
       try {
-        const res = await axios.get('http://localhost:8000/getTeachers', { withCredentials: true });
+        const res = await axios.get(getApiUrl('/getTeachers'), { withCredentials: true });
         return `There are over 50 teachers at Nawatara English School.`;
       } catch (err) {
         return "Sorry, I couldn't fetch the teacher count right now.";
@@ -268,7 +269,7 @@ const AIChatBox = () => {
     }
     // Real data fetching for lists and notices
     if (/student list|show me the student list|list students|all students/i.test(lower)) {
-      const res = await axios.get('http://localhost:8000/getStudents', { withCredentials: true });
+      const res = await axios.get(getApiUrl('/getStudents'), { withCredentials: true });
       if (!res.data.length) return 'No students found.';
       if (!showAll && res.data.length > 10) {
         setShowMore({ type: 'students', data: res.data });
@@ -278,7 +279,7 @@ const AIChatBox = () => {
       return res.data.map(s => `• ${s.name} (Class ${s.class_name})`).join('\n');
     }
     if (/teacher list|show me the teacher list|list teachers|all teachers/i.test(lower)) {
-      const res = await axios.get('http://localhost:8000/getTeachers', { withCredentials: true });
+      const res = await axios.get(getApiUrl('/getTeachers'), { withCredentials: true });
       if (!res.data.length) return 'No teachers found.';
       if (!showAll && res.data.length > 10) {
         setShowMore({ type: 'teachers', data: res.data });
@@ -289,9 +290,9 @@ const AIChatBox = () => {
     }
     // Only allow general notices fetch for non-teacher roles
     if (role !== 'teacher' && /notice|show me notices|notices/i.test(lower)) {
-      let url = 'http://localhost:8000/get/notices';
-      if (role === 'admin') url = 'http://localhost:8000/get/notices/admins';
-      else if (role === 'student') url = 'http://localhost:8000/get/notices/students';
+      let url = getApiUrl('/get/notices');
+      if (role === 'admin') url = getApiUrl('/get/notices/admins');
+      else if (role === 'student') url = getApiUrl('/get/notices/students');
       const res = await axios.get(url, { withCredentials: true });
       if (!res.data.length) return 'No notices found.';
       if (!showAll && res.data.length > 10) {
@@ -316,7 +317,7 @@ const AIChatBox = () => {
     }
     // In handleQA, add a catch-all for 'students datas' and similar to trigger the student list redirect flow
     if ((role === 'admin' || role === 'teacher') && /(students? data|student data|students datas|student datas|students info|student info|students information|student information)/i.test(text)) {
-      setPendingRedirectUrl('/fetch-students');
+      setPendingRedirectUrl(getApiUrl('/fetch-students'));
       return `To view the student list, do you want me to redirect you to the page?`;
     }
     // Fallback to previous QA logic

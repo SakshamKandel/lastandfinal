@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { getApiUrl } from '../../../config/api';
 
 const ViewLeaveRequests = () => {
   const [leaveRequests, setLeaveRequests] = useState([]);
@@ -14,7 +15,7 @@ const ViewLeaveRequests = () => {
 
   const fetchLeaveRequests = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/leave-requests', {
+      const response = await axios.get(getApiUrl('/leave-requests'), {
         withCredentials: true
       });
       setLeaveRequests(response.data);
@@ -27,7 +28,7 @@ const ViewLeaveRequests = () => {
   const handleStatusUpdate = async (requestId, status) => {
     try {
       await axios.put(
-        `http://localhost:8000/leave-request/${requestId}`,
+        getApiUrl(`/leave-request/${requestId}`),
         { status, adminResponse: response },
         { withCredentials: true }
       );

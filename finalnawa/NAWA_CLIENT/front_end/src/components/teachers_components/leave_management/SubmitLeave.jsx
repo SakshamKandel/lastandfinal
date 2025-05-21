@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { getApiUrl } from '../../../config/api';
 
 const SubmitLeave = () => {
   const [formData, setFormData] = useState({
@@ -17,7 +18,7 @@ const SubmitLeave = () => {
 
   const fetchMyRequests = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/my-leave-requests', {
+      const response = await axios.get(getApiUrl('/my-leave-requests'), {
         withCredentials: true
       });
       setMyRequests(response.data);
@@ -60,7 +61,7 @@ const SubmitLeave = () => {
 
     setLoading(true);
     try {
-      await axios.post('http://localhost:8000/submit-leave', formData, {
+      await axios.post(getApiUrl('/submit-leave'), formData, {
         withCredentials: true
       });
       setMessage('Leave request submitted successfully!');

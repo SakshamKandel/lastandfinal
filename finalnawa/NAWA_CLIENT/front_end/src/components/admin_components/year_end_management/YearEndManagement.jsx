@@ -15,6 +15,7 @@ import {
   FaUserCog,
   FaChevronRight
 } from 'react-icons/fa';
+import { getApiUrl } from '../../../config/api';
 
 const YearEndManagement = () => {
   const navigate = useNavigate();
@@ -46,7 +47,7 @@ const YearEndManagement = () => {
 
   const fetchAcademicYearStatus = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/api/year-end/academic-year', { withCredentials: true });
+      const response = await axios.get(getApiUrl('/year-end/academic-year'), { withCredentials: true });
       setAcademicYear(response.data);
     } catch (error) {
       toast.error('Failed to fetch academic year status');
@@ -60,7 +61,7 @@ const YearEndManagement = () => {
     }
     try {
       setLoading(true);
-      const response = await axios.get(`http://localhost:8000/api/year-end/promotion-status/${class_name}`, { withCredentials: true });
+      const response = await axios.get(getApiUrl(`/year-end/promotion-status/${class_name}`), { withCredentials: true });
       setPromotionStatus(response.data);
     } catch (error) {
       toast.error('Failed to fetch promotion status');
@@ -88,7 +89,7 @@ const YearEndManagement = () => {
 
     try {
       // Always download complete student report first
-      const allStudentsResponse = await fetch('http://localhost:8000/api/year-end/export-all-students', {
+      const allStudentsResponse = await fetch(getApiUrl('/year-end/export-all-students'), {
         method: 'GET',
         credentials: 'include'
       });
@@ -115,7 +116,7 @@ const YearEndManagement = () => {
       if (isBatch) {
         // For batch promotion, download each class file
         for (let i = 1; i <= 6; i++) {
-          const classResponse = await fetch(`http://localhost:8000/api/year-end/export-class-for-promotion?classNum=${i}`, {
+          const classResponse = await fetch(getApiUrl(`/year-end/export-class-for-promotion?classNum=${i}`), {
             method: 'GET',
             credentials: 'include'
           });
@@ -137,7 +138,7 @@ const YearEndManagement = () => {
         }
       } else if (classNum) {
         // For single class promotion
-        const classResponse = await fetch(`http://localhost:8000/api/year-end/export-class-for-promotion?classNum=${classNum}`, {
+        const classResponse = await fetch(getApiUrl(`/year-end/export-class-for-promotion?classNum=${classNum}`), {
           method: 'GET',
           credentials: 'include'
         });
@@ -158,7 +159,7 @@ const YearEndManagement = () => {
           
           // If promoting class 5, also download class 6
           if (parseInt(classNum) === 5) {
-            const class6Response = await fetch('http://localhost:8000/api/year-end/export-class-for-promotion?classNum=6', {
+            const class6Response = await fetch(getApiUrl('/year-end/export-class-for-promotion?classNum=6'), {
               method: 'GET',
               credentials: 'include'
             });
@@ -247,7 +248,7 @@ const YearEndManagement = () => {
     try {
       setLoading(true);
       
-      const response = await axios.post('http://localhost:8000/api/year-end/promote-students', {
+      const response = await axios.post(getApiUrl('/year-end/promote-students'), {
         class_name: classNum,
         academicYear: academicYear.year,
         password
@@ -343,7 +344,7 @@ const YearEndManagement = () => {
         
           // Promote students
           console.log(`Promoting students in class ${classNum}`);
-          const promoteRes = await axios.post('http://localhost:8000/api/year-end/promote-students', {
+          const promoteRes = await axios.post(getApiUrl('/year-end/promote-students'), {
             class_name: classNum,
             academicYear: academicYear.year,
             password
@@ -433,7 +434,7 @@ const YearEndManagement = () => {
   const clearPayrollRecords = async () => {
     try {
       setLoading(true);
-      await axios.post('http://localhost:8000/api/year-end/clear-payroll', {
+      await axios.post(getApiUrl('/year-end/clear-payroll'), {
         academicYear: academicYear.year,
         password
       }, { withCredentials: true });
@@ -465,7 +466,7 @@ const YearEndManagement = () => {
     try {
       setLoading(true);
       
-      const response = await fetch('http://localhost:8000/api/year-end/export-all-students', {
+      const response = await fetch(getApiUrl('/year-end/export-all-students'), {
         method: 'GET',
         credentials: 'include'
       });

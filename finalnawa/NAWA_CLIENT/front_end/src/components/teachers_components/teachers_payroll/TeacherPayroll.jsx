@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import NoAccess from "../../NoAccess";
 import { toast } from 'react-toastify';
+import { getApiUrl } from '../../../config/api';
 // import { PDFViewer } from "@react-pdf/renderer";
 // import TeacherReceiptPDF from "./TeacherReceiptPDF";
 
@@ -43,7 +44,7 @@ const TeacherPayroll = () => {
     const view_teachers_func = async () => {
       try {
         const teachersData = await axios.get(
-          "http://localhost:8000/api/teacher-payroll",
+          getApiUrl('/teacher-payroll'),
           {
             withCredentials: true,
           }
@@ -83,7 +84,7 @@ const TeacherPayroll = () => {
       setbtnClick(true);
       
       const response = await axios.get(
-        `http://localhost:8000/api/teacher-payroll/${id}`,
+        getApiUrl(`/teacher-payroll/${id}`),
         { withCredentials: true }
       );
       setRecord([response.data]);
@@ -107,7 +108,7 @@ const TeacherPayroll = () => {
       const isEditingPaidRecord = record[0]?.records[month]?.status === 'paid';
       
       const response = await axios.put(
-        `http://localhost:8000/api/teacher-payroll/${selectedTeacherId}`,
+        getApiUrl(`/teacher-payroll/${selectedTeacherId}`),
         {
           month,
           salary: parseFloat(salaryForm.salary) || 0,
@@ -142,7 +143,7 @@ const TeacherPayroll = () => {
     if (!selectedTeacherId) return;
     if (!window.confirm('Are you sure you want to clear all payroll records for this teacher?')) return;
     try {
-      await axios.post('http://localhost:8000/api/teacher-payroll/clear', { teacherId: selectedTeacherId }, { withCredentials: true });
+      await axios.post(getApiUrl('teacher-payroll/clear'), { teacherId: selectedTeacherId }, { withCredentials: true });
       toast.success('Payroll records cleared successfully!');
       setRecord([]);
       setbtnClick(false);

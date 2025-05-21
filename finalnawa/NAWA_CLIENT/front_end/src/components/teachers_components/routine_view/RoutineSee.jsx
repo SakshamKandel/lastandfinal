@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import NoAccess from "../../NoAccess";
 import axios from "axios";
 import { toast } from 'react-toastify';
+import { getApiUrl } from '../../../config/api';
 
 const RoutineSee = () => {
   const teacherLoggedIn = document.cookie.includes("teacherToken");
@@ -31,7 +32,7 @@ const RoutineSee = () => {
         if (teacherLoggedIn) {
           setLoading(true);
           const response = await axios.get(
-            `http://localhost:8000/fetch/routines`,
+            getApiUrl('/fetch/routines'),
             { withCredentials: true }
           );
           setRoutines(response.data);
