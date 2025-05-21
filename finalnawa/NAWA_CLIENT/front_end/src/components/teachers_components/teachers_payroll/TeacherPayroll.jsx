@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import NoAccess from "../../NoAccess";
 import { toast } from 'react-toastify';
 import { getApiUrl } from '../../../config/api';
-import api from '../../utils/api';
+import api from '../../../utils/api';
 // import { PDFViewer } from "@react-pdf/renderer";
 // import TeacherReceiptPDF from "./TeacherReceiptPDF";
 
