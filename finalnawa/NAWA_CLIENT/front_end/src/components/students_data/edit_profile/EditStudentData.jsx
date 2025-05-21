@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import NoAccess from "../../NoAccess";
 import { useForm } from "react-hook-form";
-import axios from "axios";
+import api from '../../../utils/api';
 import { toast } from 'react-toastify';
 import { getApiUrl } from '../../../config/api';
 
@@ -24,11 +24,7 @@ const EditStudentData = () => {
       } else {
         setShowConfirm(true);
         setConfirmAction(() => async () => {
-          const response = await axios.patch(
-            getApiUrl(`/editStudent/${location.state.student._id}`),
-            data,
-            {withCredentials: true}
-          );
+          const response = await api.patch(getApiUrl(`/editStudent/${location.state.student._id}`), data);
           toast.success(response.data);
           navigate("/fetch-students");
         });

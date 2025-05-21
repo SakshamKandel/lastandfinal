@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
-import axios from "axios";
+import api from '../../../utils/api';
 import { useNavigate } from "react-router-dom";
 import { toast } from 'react-toastify';
 import { getApiUrl } from "../../../config/api";
@@ -28,11 +28,7 @@ const CreateAccountAdmin = () => {
 
   const createAdmin = async (data) => {
     try {
-      const response = await axios.post(
-        getApiUrl("/create/admin"),
-        data,
-        { withCredentials: true }
-      );
+      const response = await api.post(getApiUrl('/create/admin'), data);
       toast.success(response.data);
       navigate("/");
     } catch (error) {

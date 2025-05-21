@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import NoAccess from "../../NoAccess";
 import { useForm } from "react-hook-form";
-import axios from "axios";
+import api from '../../../utils/api';
 import { toast } from 'react-toastify';
 import { getApiUrl } from '../../../config/api';
 
@@ -22,10 +22,7 @@ const EditFeeRecord = () => {
   useEffect(() => {
     const fetchOldRecord = async () => {
       try {
-        const response = await axios.get(
-          getApiUrl(`/getFee/${location.state?.id}`),
-          { withCredentials: true }
-        );
+        const response = await api.get(getApiUrl(`/getFee/${location.state?.id}`));
         setRecord(response.data);
         setValue(
           "adm_fee",
@@ -72,11 +69,7 @@ const EditFeeRecord = () => {
           };
           setRecord([updatedRecord]);
 
-          const response = await axios.patch(
-            getApiUrl(`/editFee/${location.state.id}`),
-            updatedRecord,
-            { withCredentials: true }
-          );
+          const response = await api.patch(getApiUrl(`/editFee/${location.state.id}`), updatedRecord);
 
           toast.success(response.data);
           navigate("/fetch-students");

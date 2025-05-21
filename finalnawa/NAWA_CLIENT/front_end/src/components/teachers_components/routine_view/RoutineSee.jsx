@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import NoAccess from "../../NoAccess";
-import axios from "axios";
+import api from '../../../utils/api';
 import { toast } from 'react-toastify';
 import { getApiUrl } from '../../../config/api';
 
@@ -31,10 +31,7 @@ const RoutineSee = () => {
       try {
         if (teacherLoggedIn) {
           setLoading(true);
-          const response = await axios.get(
-            getApiUrl('/fetch/routines'),
-            { withCredentials: true }
-          );
+          const response = await api.get(getApiUrl('/fetch/routines'));
           setRoutines(response.data);
           setLoading(false);
         }

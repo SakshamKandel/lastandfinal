@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../../utils/api';
 import { useNavigate } from 'react-router-dom';
 import { getApiUrl } from '../../config/api';
 
@@ -28,9 +28,7 @@ const SubmitNotice = () => {
           return;
         }
 
-        const response = await axios.get(getApiUrl('/getTeachers'), {
-          withCredentials: true
-        });
+        const response = await api.get(getApiUrl('/getTeachers'));
         
         console.log('Teachers data:', response.data); // Debug log
         
@@ -58,9 +56,7 @@ const SubmitNotice = () => {
       setNoticesLoading(true);
       setNoticesError('');
       try {
-        const response = await axios.get(getApiUrl(`/teacher-alerts?teacherId=${teacherId}`), {
-          withCredentials: true
-        });
+        const response = await api.get(getApiUrl(`/teacher-alerts?teacherId=${teacherId}`));
         setNotices(response.data);
       } catch (error) {
         setNoticesError('Failed to fetch your notices');
@@ -89,12 +85,7 @@ const SubmitNotice = () => {
 
     try {
       console.log('Submitting notice with data:', { ...formData, teacherId }); // Debug log
-      const response = await axios.post(getApiUrl('/create-notice'), {
-        ...formData,
-        teacherId
-      }, {
-        withCredentials: true
-      });
+      const response = await api.post(getApiUrl('/create-notice'), formData);
       console.log('Notice submission response:', response.data); // Debug log
       setMessage('Notice submitted successfully!');
       setFormData({ subject: '', message: '' });

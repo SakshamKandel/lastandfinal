@@ -75,43 +75,43 @@ export default function App() {
 
   return (
     <ErrorBoundary>
-      <Router>
-        <Context>
-          <ToastContainer position="top-right" style={{ marginTop: '5rem' }} />
-          <Navbar />
-          <main className="z-10 bg-[url('https://images.rawpixel.com/image_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTA4L3JtNjIxLWJhY2tncm91bmQtMDMwYi5qcGc.jpg')] min-h-screen">
-            <Routes>
-              <Route exact path="/" element={<Home />} />
-              <Route exact path="/about-us" element={<About />} />
-              <Route exact path="/contact-us" element={<ContactUs/>}/>
-              <Route exact path="/login-form" element={<LoginForm />} />
-              <Route exact path="/create-notice" element={<CreateNotice />} />
-              <Route exact path="/notice" element={<Notice />} />
-              <Route exact path="/routine" element={<RoutineSee/>} />
-              <Route exact path="/routines" element={<RoutineEdit />} />
-              <Route exact path="/create-account-teacher" element={<CreateAccountTeacher />} />
-              <Route exact path="/create-account-student" element={<CreateAccountStudent />} />
-              <Route exact path="/create-account-admin" element={<CreateAccountAdmin/>} />
-              <Route exact path="/fetch-students" element={<FetchStudents />} />
-              <Route exact path="/edit-details" element={<EditStudentData />} />
-              <Route exact path="/view-fee" element={<ViewFee />} />
-              <Route exact path="/edit-student-fee-record" element={<EditFeeRecord/>} />
-              <Route exact path="/view-teachers-payroll" element={<TeacherPayroll/>} />
-              <Route exact path="/my-salary" element={<MySalary />} />
-              <Route exact path="/admin/remove-teacher" element={<RemoveTeacher />} />
-              <Route exact path="/submit-leave" element={<SubmitLeave />} />
-              <Route exact path="/admin/leave-requests" element={<ViewLeaveRequests />} />
-              <Route exact path="/admin/teacher-notices" element={<ViewTeacherNotices />} />
-              <Route exact path="/submit-notice" element={<SubmitNotice />} />
-              <Route exact path="/teacher-alerts" element={<TeacherAlerts />} />
-              <Route exact path="/admin/year-end" element={<YearEndManagement />} />
-              <Route exact path="/static-calendar" element={<CalendarPage />} />
-            </Routes>
-          </main>
-          <AIChatBox />
-          <Footer />
-        </Context>
-      </Router>
+    <Router>
+      <Context>
+        <ToastContainer position="top-right" style={{ marginTop: '5rem' }} />
+        <Navbar />
+        <main className="z-10 bg-[url('https://images.rawpixel.com/image_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTA4L3JtNjIxLWJhY2tncm91bmQtMDMwYi5qcGc.jpg')] min-h-screen">
+          <Routes>
+            <Route exact path="/" element={<Home />} />
+            <Route exact path="/about-us" element={<About />} />
+            <Route exact path="/contact-us" element={<ContactUs/>}/>
+            <Route exact path="/login-form" element={<LoginForm />} />
+            <Route exact path="/create-notice" element={<CreateNotice />} />
+            <Route exact path="/notice" element={<Notice />} />
+            <Route exact path="/routine" element={<RoutineSee/>} />
+            <Route exact path="/routines" element={<RoutineEdit />} />
+            <Route exact path="/create-account-teacher" element={<CreateAccountTeacher />} />
+            <Route exact path="/create-account-student" element={<CreateAccountStudent />} />
+            <Route exact path="/create-account-admin" element={<CreateAccountAdmin/>} />
+            <Route exact path="/fetch-students" element={<FetchStudents />} />
+            <Route exact path="/edit-details" element={<EditStudentData />} />
+            <Route exact path="/view-fee" element={<ViewFee />} />
+            <Route exact path="/edit-student-fee-record" element={<EditFeeRecord/>} />
+            <Route exact path="/view-teachers-payroll" element={<TeacherPayroll/>} />
+            <Route exact path="/my-salary" element={<MySalary />} />
+            <Route exact path="/admin/remove-teacher" element={<RemoveTeacher />} />
+            <Route exact path="/submit-leave" element={<SubmitLeave />} />
+            <Route exact path="/admin/leave-requests" element={<ViewLeaveRequests />} />
+            <Route exact path="/admin/teacher-notices" element={<ViewTeacherNotices />} />
+            <Route exact path="/submit-notice" element={<SubmitNotice />} />
+            <Route exact path="/teacher-alerts" element={<TeacherAlerts />} />
+            <Route exact path="/admin/year-end" element={<YearEndManagement />} />
+            <Route exact path="/static-calendar" element={<CalendarPage />} />
+          </Routes>
+        </main>
+        <AIChatBox />
+        <Footer />
+      </Context>
+    </Router>
     </ErrorBoundary>
   );
 }

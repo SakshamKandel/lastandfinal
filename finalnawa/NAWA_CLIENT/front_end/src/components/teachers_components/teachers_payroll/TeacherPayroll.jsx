@@ -1,8 +1,8 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import NoAccess from "../../NoAccess";
 import { toast } from 'react-toastify';
 import { getApiUrl } from '../../../config/api';
+import api from '../../utils/api';
 // import { PDFViewer } from "@react-pdf/renderer";
 // import TeacherReceiptPDF from "./TeacherReceiptPDF";
 
@@ -43,12 +43,7 @@ const TeacherPayroll = () => {
   useEffect(() => {
     const view_teachers_func = async () => {
       try {
-        const teachersData = await axios.get(
-          getApiUrl('/teacher-payroll'),
-          {
-            withCredentials: true,
-          }
-        );
+        const teachersData = await api.get(getApiUrl('/getTeachers'));
         setTeachers(teachersData.data);
         setFilteredTeachers(teachersData.data);
       } catch (error) {
@@ -83,10 +78,7 @@ const TeacherPayroll = () => {
       setShowMsg("Hide");
       setbtnClick(true);
       
-      const response = await axios.get(
-        getApiUrl(`/teacher-payroll/${id}`),
-        { withCredentials: true }
-      );
+      const response = await api.get(getApiUrl(`/api/teacher-payroll/${id}`));
       setRecord([response.data]);
       setIsLoading(false);
     } catch (error) {
@@ -107,17 +99,13 @@ const TeacherPayroll = () => {
       // Check if we're editing an existing paid record
       const isEditingPaidRecord = record[0]?.records[month]?.status === 'paid';
       
-      const response = await axios.put(
-        getApiUrl(`/teacher-payroll/${selectedTeacherId}`),
-        {
-          month,
-          salary: parseFloat(salaryForm.salary) || 0,
-          allowance: parseFloat(salaryForm.allowance) || 0,
-          remarks: salaryForm.remarks,
-          updatePaidRecord: isEditingPaidRecord // Add flag to maintain paid status on backend
-        },
-        { withCredentials: true }
-      );
+      const response = await api.put(getApiUrl(`/api/teacher-payroll/${selectedTeacherId}`), {
+        month,
+        salary: parseFloat(salaryForm.salary) || 0,
+        allowance: parseFloat(salaryForm.allowance) || 0,
+        remarks: salaryForm.remarks,
+        updatePaidRecord: isEditingPaidRecord // Add flag to maintain paid status on backend
+      });
       
       setRecord([response.data]);
       setSelectedMonth(null);
@@ -143,7 +131,7 @@ const TeacherPayroll = () => {
     if (!selectedTeacherId) return;
     if (!window.confirm('Are you sure you want to clear all payroll records for this teacher?')) return;
     try {
-      await axios.post(getApiUrl('teacher-payroll/clear'), { teacherId: selectedTeacherId }, { withCredentials: true });
+      await api.post(getApiUrl('teacher-payroll/clear'), { teacherId: selectedTeacherId });
       toast.success('Payroll records cleared successfully!');
       setRecord([]);
       setbtnClick(false);

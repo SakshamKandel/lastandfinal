@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import axios from 'axios';
+import api from '../../../utils/api';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { 
@@ -47,7 +47,7 @@ const YearEndManagement = () => {
 
   const fetchAcademicYearStatus = async () => {
     try {
-      const response = await axios.get(getApiUrl('/year-end/academic-year'), { withCredentials: true });
+      const response = await api.get(getApiUrl('/api/year-end/academic-year'));
       setAcademicYear(response.data);
     } catch (error) {
       toast.error('Failed to fetch academic year status');
@@ -61,7 +61,7 @@ const YearEndManagement = () => {
     }
     try {
       setLoading(true);
-      const response = await axios.get(getApiUrl(`/year-end/promotion-status/${class_name}`), { withCredentials: true });
+      const response = await api.get(getApiUrl(`/api/year-end/promotion-status/${class_name}`));
       setPromotionStatus(response.data);
     } catch (error) {
       toast.error('Failed to fetch promotion status');
@@ -248,15 +248,10 @@ const YearEndManagement = () => {
     try {
       setLoading(true);
       
-      const response = await axios.post(getApiUrl('/year-end/promote-students'), {
+      const response = await api.post(getApiUrl('/api/year-end/promote-students'), {
         class_name: classNum,
         academicYear: academicYear.year,
         password
-      }, {
-        withCredentials: true,
-        headers: {
-          'Content-Type': 'application/json'
-        }
       });
       
       if (classNum === '5' || parseInt(classNum) === 5) {
@@ -344,11 +339,11 @@ const YearEndManagement = () => {
         
           // Promote students
           console.log(`Promoting students in class ${classNum}`);
-          const promoteRes = await axios.post(getApiUrl('/year-end/promote-students'), {
+          const promoteRes = await api.post(getApiUrl('/api/year-end/promote-students'), {
             class_name: classNum,
             academicYear: academicYear.year,
             password
-          }, { withCredentials: true });
+          });
           
           console.log(`Promotion response for class ${classNum}:`, promoteRes.data);
           
@@ -434,10 +429,7 @@ const YearEndManagement = () => {
   const clearPayrollRecords = async () => {
     try {
       setLoading(true);
-      await axios.post(getApiUrl('/year-end/clear-payroll'), {
-        academicYear: academicYear.year,
-        password
-      }, { withCredentials: true });
+      await api.post(getApiUrl('/api/year-end/clear-payroll'));
       
       toast.success('Payroll records cleared successfully');
       fetchAcademicYearStatus();

@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import axios from 'axios';
+import api from './utils/api';
 import { getApiUrl } from '../config/api';
 
 const BOT_AVATAR = 'https://cdn-icons-png.flaticon.com/512/4712/4712035.png';
@@ -74,12 +74,12 @@ const QA = [
   {
     role: 'admin',
     patterns: [
-      { q: /how many students|student count|total students|number of students|kids|children/i, a: async () => { const res = await axios.get(getApiUrl('/getStudents'), { withCredentials: true }); return `There are ${res.data.length} students.`; } },
-      { q: /how many teachers|teacher count|total teachers|number of teachers|staff|dedicated staff/i, a: async () => { const res = await axios.get(getApiUrl('/getTeachers'), { withCredentials: true }); return `There are over 50 teachers at Nawatara English School.`; } },
-      { q: /salary|payroll|payment|pay|wages|my pay|teacher pay|teacher salary/i, a: async () => { const res = await axios.get(getApiUrl('/getSalaryRecords'), { withCredentials: true }); return res.data.length ? res.data.slice(0, 5).map(s => `• ${s.teacherName}: Rs. ${s.amount}`).join('\n') : 'No salary records found.'; } },
-      { q: /routine|schedule|period|class routine|class schedule|today's routine|today's schedule/i, a: async () => { const res = await axios.get(getApiUrl('/getRoutine'), { withCredentials: true }); return res.data.length ? res.data.slice(0, 5).map(r => `• ${r.time} - ${r.subject} (${r.teacher}, Class ${r.class})`).join('\n') : 'No routine info.'; } },
-      { q: /list students|show students|student list/i, a: async () => { const res = await axios.get(getApiUrl('/getStudents'), { withCredentials: true }); return res.data.length ? res.data.slice(0, 5).map(s => `• ${s.name} (Class ${s.class_name})`).join('\n') : 'No students found.'; } },
-      { q: /list teachers|show teachers|teacher list/i, a: async () => { const res = await axios.get(getApiUrl('/getTeachers'), { withCredentials: true }); return res.data.length ? res.data.slice(0, 5).map(t => `• ${t.name} (${t.email})`).join('\n') : 'No teachers found.'; } },
+      { q: /how many students|student count|total students|number of students|kids|children/i, a: async () => { const res = await api.get(getApiUrl('/getStudents')); return `There are ${res.data.length} students.`; } },
+      { q: /how many teachers|teacher count|total teachers|number of teachers|staff|dedicated staff/i, a: async () => { const res = await api.get(getApiUrl('/getTeachers')); return `There are over 50 teachers at Nawatara English School.`; } },
+      { q: /salary|payroll|payment|pay|wages|my pay|teacher pay|teacher salary/i, a: async () => { const res = await api.get(getApiUrl('/getSalaryRecords')); return res.data.length ? res.data.slice(0, 5).map(s => `• ${s.teacherName}: Rs. ${s.amount}`).join('\n') : 'No salary records found.'; } },
+      { q: /routine|schedule|period|class routine|class schedule|today's routine|today's schedule/i, a: async () => { const res = await api.get(getApiUrl('/getRoutine')); return res.data.length ? res.data.slice(0, 5).map(r => `• ${r.time} - ${r.subject} (${r.teacher}, Class ${r.class})`).join('\n') : 'No routine info.'; } },
+      { q: /list students|show students|student list/i, a: async () => { const res = await api.get(getApiUrl('/getStudents')); return res.data.length ? res.data.slice(0, 5).map(s => `• ${s.name} (Class ${s.class_name})`).join('\n') : 'No students found.'; } },
+      { q: /list teachers|show teachers|teacher list/i, a: async () => { const res = await api.get(getApiUrl('/getTeachers')); return res.data.length ? res.data.slice(0, 5).map(t => `• ${t.name} (${t.email})`).join('\n') : 'No teachers found.'; } },
       { q: /school|about|info|information|location|where|facilities|facility|staff|student|children|kids|services|infrastructure/i, a: async () => {
         return "Nawatara English School is located in Biratnagar, Nepal. We have over 50 dedicated staff members and more than 500 students. Facilities include science labs, computer labs, library, sports ground, and a cafeteria.";
       } },
@@ -138,7 +138,7 @@ const QA = [
   {
     role: 'student',
     patterns: [
-      { q: /my routine|my schedule|my period|my class|my timetable|my today/i, a: async () => { const res = await axios.get(getApiUrl('/getRoutine'), { withCredentials: true }); return res.data.length ? res.data.slice(0, 5).map(r => `• ${r.time} - ${r.subject} (${r.teacher}, Class ${r.class})`).join('\n') : 'No routine info.'; } },
+      { q: /my routine|my schedule|my period|my class|my timetable|my today/i, a: async () => { const res = await api.get(getApiUrl('/getRoutine')); return res.data.length ? res.data.slice(0, 5).map(r => `• ${r.time} - ${r.subject} (${r.teacher}, Class ${r.class})`).join('\n') : 'No routine info.'; } },
       { q: /school|about|info|information|location|where|facilities|facility|staff|student|children|kids|services|infrastructure/i, a: async () => {
         return "Nawatara English School is located in Biratnagar, Nepal. We have over 50 dedicated staff members and more than 500 students. Facilities include science labs, computer labs, library, sports ground, and a cafeteria.";
       } },
@@ -223,7 +223,7 @@ const AIChatBox = () => {
     // Admin: How many students?
     if (role === 'admin' && /how many students|student count|total students|number of students|kids|children/i.test(lower)) {
       try {
-        const res = await axios.get(getApiUrl('/getStudents'), { withCredentials: true });
+        const res = await api.get(getApiUrl('/getStudents'));
         if (!res.data || !Array.isArray(res.data)) return "Sorry, I couldn't fetch the student count right now. Please try again later or contact support.";
         return `There are ${res.data.length} students enrolled in the school.`;
       } catch (err) {
@@ -233,7 +233,7 @@ const AIChatBox = () => {
     // Admin: How many teachers?
     if (role === 'admin' && /how many teachers|teacher count|total teachers|number of teachers|staff|dedicated staff/i.test(lower)) {
       try {
-        const res = await axios.get(getApiUrl('/getTeachers'), { withCredentials: true });
+        const res = await api.get(getApiUrl('/getTeachers'));
         return `There are over 50 teachers at Nawatara English School.`;
       } catch (err) {
         return "Sorry, I couldn't fetch the teacher count right now.";
@@ -242,7 +242,7 @@ const AIChatBox = () => {
     // Teacher: How many students?
     if (role === 'teacher' && /how many students|student count|total students|number of students|kids|children/i.test(lower)) {
       try {
-        const res = await axios.get(getApiUrl('/getStudents'), { withCredentials: true });
+        const res = await api.get(getApiUrl('/getStudents'));
         if (!res.data || !Array.isArray(res.data)) return "Sorry, I couldn't fetch the student count right now. Please try again later or contact support.";
         return `There are ${res.data.length} students enrolled in the school.`;
       } catch (err) {
@@ -252,7 +252,7 @@ const AIChatBox = () => {
     // Teacher: How many teachers?
     if (role === 'teacher' && /how many teachers|teacher count|total teachers|number of teachers|staff|dedicated staff/i.test(lower)) {
       try {
-        const res = await axios.get(getApiUrl('/getTeachers'), { withCredentials: true });
+        const res = await api.get(getApiUrl('/getTeachers'));
         return `There are over 50 teachers at Nawatara English School.`;
       } catch (err) {
         return "Sorry, I couldn't fetch the teacher count right now.";
@@ -269,7 +269,7 @@ const AIChatBox = () => {
     }
     // Real data fetching for lists and notices
     if (/student list|show me the student list|list students|all students/i.test(lower)) {
-      const res = await axios.get(getApiUrl('/getStudents'), { withCredentials: true });
+      const res = await api.get(getApiUrl('/getStudents'));
       if (!res.data.length) return 'No students found.';
       if (!showAll && res.data.length > 10) {
         setShowMore({ type: 'students', data: res.data });
@@ -279,7 +279,7 @@ const AIChatBox = () => {
       return res.data.map(s => `• ${s.name} (Class ${s.class_name})`).join('\n');
     }
     if (/teacher list|show me the teacher list|list teachers|all teachers/i.test(lower)) {
-      const res = await axios.get(getApiUrl('/getTeachers'), { withCredentials: true });
+      const res = await api.get(getApiUrl('/getTeachers'));
       if (!res.data.length) return 'No teachers found.';
       if (!showAll && res.data.length > 10) {
         setShowMore({ type: 'teachers', data: res.data });
@@ -293,7 +293,7 @@ const AIChatBox = () => {
       let url = getApiUrl('/get/notices');
       if (role === 'admin') url = getApiUrl('/get/notices/admins');
       else if (role === 'student') url = getApiUrl('/get/notices/students');
-      const res = await axios.get(url, { withCredentials: true });
+      const res = await api.get(url);
       if (!res.data.length) return 'No notices found.';
       if (!showAll && res.data.length > 10) {
         setShowMore({ type: 'notices', data: res.data });

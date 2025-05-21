@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../../utils/api';
 import { toast } from 'react-toastify';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import { getApiUrl } from '../../config/api';
@@ -22,9 +22,7 @@ const TeacherAlerts = () => {
           return;
         }
 
-        const response = await axios.get(getApiUrl('/getTeachers'), {
-          withCredentials: true
-        });
+        const response = await api.get(getApiUrl('/getTeachers'));
         
         const teacher = response.data.find(t => t.email === storedEmail);
         if (teacher) {
@@ -45,9 +43,7 @@ const TeacherAlerts = () => {
 
   const fetchNotices = async (id) => {
     try {
-      const response = await axios.get(getApiUrl(`/teacher-alerts?teacherId=${id}`), {
-        withCredentials: true
-      });
+      const response = await api.get(getApiUrl(`/teacher-alerts?teacherId=${id}`));
       setNotices(response.data);
       setLoading(false);
     } catch (error) {

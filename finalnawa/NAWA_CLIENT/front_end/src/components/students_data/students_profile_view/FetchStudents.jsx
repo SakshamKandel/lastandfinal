@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import axios from "axios";
+import api from '../../../utils/api';
 import { Link, useNavigate } from "react-router-dom";
 import FetchStudentData from "./FetchStudentData";
 import NoAccess from "../../NoAccess";
@@ -42,10 +42,7 @@ const FetchStudents = () => {
     let allStudents = [];
     for (let c = from; c <= to; c++) {
       try {
-        const response = await axios.get(
-          getApiUrl(`/getStudents/${c}`),
-          { withCredentials: true }
-        );
+        const response = await api.get(getApiUrl(`/getStudents/${c}`));
         allStudents = allStudents.concat(response.data);
       } catch (error) {
         // Optionally handle error for each class

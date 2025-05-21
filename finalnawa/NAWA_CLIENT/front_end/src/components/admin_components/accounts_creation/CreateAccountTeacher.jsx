@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import axios from "axios";
+import api from '../../../utils/api';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash, faChalkboardTeacher } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
@@ -35,11 +35,7 @@ const CreateAccountTeacher = () => {
       } else {
         setShowConfirm(true);
         setConfirmAction(() => async () => {
-          const response = await axios.post(
-            getApiUrl("/create/teacher"),
-            data,
-            { withCredentials: true }
-          );
+          const response = await api.post(getApiUrl('/create/teacher'), data);
           toast.success(response.data);
           navigate("/");
         });

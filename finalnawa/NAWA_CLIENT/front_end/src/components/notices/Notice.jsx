@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import api from '../../utils/api';
 import { toast, Slide } from 'react-toastify';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import { getApiUrl } from "../../config/api";
@@ -19,22 +19,13 @@ const Notice = () => {
       try {
         setLoading(true);
         if (!teacherLoggedIn && !adminLoggedIn && !studentLoggedIn) {
-          response = await axios.get(getApiUrl("/get/notices"));
+          response = await api.get(getApiUrl("/get/notices"));
         } else if (teacherLoggedIn) {
-          response = await axios.get(
-            getApiUrl("/get/notices/teachers"),
-            { withCredentials: true }
-          );
+          response = await api.get(getApiUrl("/get/notices/teachers"));
         } else if (adminLoggedIn) {
-          response = await axios.get(
-            getApiUrl("/get/notices/admins"),
-            { withCredentials: true }
-          );
+          response = await api.get(getApiUrl("/get/notices/admins"));
         } else {
-          response = await axios.get(
-            getApiUrl("/get/notices/students"),
-            { withCredentials: true }
-          );
+          response = await api.get(getApiUrl("/get/notices/students"));
         }
         
         // Sort notices by date (newest first)
@@ -150,7 +141,7 @@ const Notice = () => {
           onClick={async () => {
             toast.dismiss();
             try {
-              await axios.delete(getApiUrl(`/admin/delete/notice/${noticeId}`), { withCredentials: true });
+              await api.delete(getApiUrl(`/admin/delete/notice/${noticeId}`));
               setNotices((prev) => prev.filter((n) => n._id !== noticeId));
               toast.success('Notice deleted successfully');
             } catch (error) {

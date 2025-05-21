@@ -53,6 +53,12 @@ app.use((req, res, next) => {
   next();
 });
 
+// Global header logging for debugging
+app.use((req, res, next) => {
+  console.log('Incoming Headers:', req.headers);
+  next();
+});
+
 // Health check endpoint
 app.get('/health', (req, res) => {
   res.status(200).json({

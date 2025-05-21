@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../../../utils/api';
 import { getApiUrl } from '../../../config/api';
 
 const SubmitLeave = () => {
@@ -18,9 +18,7 @@ const SubmitLeave = () => {
 
   const fetchMyRequests = async () => {
     try {
-      const response = await axios.get(getApiUrl('/my-leave-requests'), {
-        withCredentials: true
-      });
+      const response = await api.get(getApiUrl('/my-leave-requests'));
       setMyRequests(response.data);
     } catch (error) {
       console.error('Error fetching requests:', error);
@@ -61,9 +59,7 @@ const SubmitLeave = () => {
 
     setLoading(true);
     try {
-      await axios.post(getApiUrl('/submit-leave'), formData, {
-        withCredentials: true
-      });
+      await api.post(getApiUrl('/submit-leave'), formData);
       setMessage('Leave request submitted successfully!');
       setFormData({ startDate: '', endDate: '', reason: '' });
       fetchMyRequests();
