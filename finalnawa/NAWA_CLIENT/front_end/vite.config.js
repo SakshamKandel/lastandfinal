@@ -4,6 +4,7 @@ import path from 'path'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  base: './',
   server: {
     host: true,
     port: 5173,
@@ -26,10 +27,9 @@ export default defineConfig({
     sourcemap: true,
     chunkSizeWarningLimit: 1600,
     rollupOptions: {
-      external: ['react-toastify'],
       output: {
-        globals: {
-          'react-toastify': 'ReactToastify'
+        manualChunks: {
+          vendor: ['react', 'react-dom', 'react-router-dom', 'react-toastify'],
         }
       }
     }
