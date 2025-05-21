@@ -3,6 +3,8 @@ import { configDotenv } from "dotenv";
 
 configDotenv();
 
+const isProduction = process.env.NODE_ENV === "production";
+
 const token_login = async (req, res) => {
   try {
     console.log('User type:', req.userType); // Debug log
@@ -16,21 +18,18 @@ const token_login = async (req, res) => {
     console.log('Token payload:', pay_load); // Debug log
     
     const token = jwt.sign(pay_load, process.env.SECRET_KEY);
+    const cookieOptions = {
+      secure: isProduction,
+      sameSite: isProduction ? "none" : "lax",
+      httpOnly: true,
+      // domain: isProduction ? "nawataraenglish.onrender.com" : undefined,
+    };
     if (req.userType === "teacher") {
-      res.cookie("teacherToken", token, {
-        secure: true,
-        sameSite: "strict",
-      });
+      res.cookie("teacherToken", token, cookieOptions);
     } else if (req.userType === "admin") {
-      res.cookie("adminToken", token, {
-        secure: true,
-        sameSite: "strict",
-      });
+      res.cookie("adminToken", token, cookieOptions);
     } else {
-      res.cookie("studentToken", token, {
-        secure: true,
-        sameSite: "strict",
-      });
+      res.cookie("studentToken", token, cookieOptions);
     }
     res.json({alertMsg:"Logged In Successfully",name:req.data.name, email:req.data.email})
   } catch (error) {
