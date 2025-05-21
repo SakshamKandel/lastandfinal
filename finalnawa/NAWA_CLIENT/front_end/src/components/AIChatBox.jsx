@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import api from './utils/api';
+import api from '../utils/api';
 import { getApiUrl } from '../config/api';
 
 const BOT_AVATAR = 'https://cdn-icons-png.flaticon.com/512/4712/4712035.png';
