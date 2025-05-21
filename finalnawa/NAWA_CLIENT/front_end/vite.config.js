@@ -19,11 +19,19 @@ export default defineConfig({
     }
   },
   optimizeDeps: {
-    include: ['react', 'react-dom'],
+    include: ['react', 'react-dom', 'react-toastify'],
     exclude: ['@react-pdf/renderer']
   },
   build: {
     sourcemap: true,
-    chunkSizeWarningLimit: 1600
+    chunkSizeWarningLimit: 1600,
+    rollupOptions: {
+      external: ['react-toastify'],
+      output: {
+        globals: {
+          'react-toastify': 'ReactToastify'
+        }
+      }
+    }
   }
 })
