@@ -22,7 +22,7 @@ const token_login = async (req, res) => {
       secure: isProduction,
       sameSite: isProduction ? "none" : "lax",
       httpOnly: true,
-      // domain: isProduction ? "nawataraenglish.onrender.com" : undefined,
+      domain: isProduction ? ".onrender.com" : undefined,
     };
     if (req.userType === "teacher") {
       res.cookie("teacherToken", token, cookieOptions);
